@@ -18,9 +18,15 @@ def initialize_light_client_store(spec, state):
 def get_sync_aggregate(spec, state, block_header, block_root=None, signature_slot=None):
     if signature_slot is None:
         signature_slot = block_header.slot
+    current_period = spec.compute_sync_committee_period(spec.compute_epoch_at_slot(state.slot))
+    signature_period = spec.compute_sync_committee_period(spec.compute_epoch_at_slot(signature_slot))
 
     all_pubkeys = [v.pubkey for v in state.validators]
-    committee = [all_pubkeys.index(pubkey) for pubkey in state.current_sync_committee.pubkeys]
+    if signature_period == current_period:
+        committee = [all_pubkeys.index(pubkey) for pubkey in state.current_sync_committee.pubkeys]
+    else:
+        assert signature_period == current_period + 1
+        committee = [all_pubkeys.index(pubkey) for pubkey in state.next_sync_committee.pubkeys]
     sync_committee_bits = [True] * len(committee)
     sync_committee_signature = compute_aggregate_sync_committee_signature(
         spec,
