@@ -183,10 +183,15 @@ def validate_light_client_update(store: LightClientStore,
             root=update.attested_header.state_root,
         )
 
-    # Verify update next sync committee if the update period incremented
-    if update_period == finalized_period:
+    # Verify that the `next_sync_committee`, if present, actually is the next sync committee saved in the
+    # state of the `active_header`
+    if update.next_sync_committee == SyncCommittee():
+        assert update_period == finalized_period
         assert update.next_sync_committee_branch == [Bytes32() for _ in range(floorlog2(NEXT_SYNC_COMMITTEE_INDEX))]
     else:
+        assert signature_period == update_period
+        if update_period == finalized_period:
+            assert update.next_sync_committee == store.next_sync_committee
         assert is_valid_merkle_branch(
             leaf=hash_tree_root(update.next_sync_committee),
             branch=update.next_sync_committee_branch,
