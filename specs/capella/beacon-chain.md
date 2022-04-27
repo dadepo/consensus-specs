@@ -22,6 +22,8 @@
     - [`Validator`](#validator)
     - [`BeaconState`](#beaconstate)
 - [Helpers](#helpers)
+  - [Misc](#misc)
+    - [Modified `compute_fork_version`](#modified-compute_fork_version)
   - [Beacon state mutators](#beacon-state-mutators)
     - [`withdraw`](#withdraw)
   - [Predicates](#predicates)
@@ -194,6 +196,24 @@ class BeaconState(Container):
 ```
 
 ## Helpers
+
+### Misc
+
+#### Modified `compute_fork_version`
+
+```python
+def compute_fork_version(epoch: Epoch) -> Version:
+    """
+    Return the fork version at the given `epoch`.
+    """
+    if epoch >= CAPELLA_FORK_EPOCH:
+        return CAPELLA_FORK_VERSION
+    if epoch >= BELLATRIX_FORK_EPOCH:
+        return BELLATRIX_FORK_VERSION
+    if epoch >= ALTAIR_FORK_EPOCH:
+        return ALTAIR_FORK_VERSION
+    return GENESIS_FORK_VERSION
+```
 
 ### Beacon state mutators
 

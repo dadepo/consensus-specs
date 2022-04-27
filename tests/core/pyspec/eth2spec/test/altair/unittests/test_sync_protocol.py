@@ -64,7 +64,6 @@ def test_process_light_client_update_not_timeout(spec, state):
         finalized_header=finality_header,
         finality_branch=finality_branch,
         sync_aggregate=sync_aggregate,
-        fork_version=state.fork.current_version,
         signature_slot=signature_slot,
     )
 
@@ -122,7 +121,6 @@ def test_process_light_client_update_at_period_boundary(spec, state):
         finalized_header=finality_header,
         finality_branch=finality_branch,
         sync_aggregate=sync_aggregate,
-        fork_version=state.fork.current_version,
         signature_slot=signature_slot,
     )
 
@@ -181,7 +179,6 @@ def test_process_light_client_update_timeout(spec, state):
         finalized_header=finality_header,
         finality_branch=finality_branch,
         sync_aggregate=sync_aggregate,
-        fork_version=state.fork.current_version,
         signature_slot=signature_slot,
     )
 
@@ -248,7 +245,6 @@ def test_process_light_client_update_finality_updated(spec, state):
         finalized_header=finalized_block_header,
         finality_branch=finality_branch,
         sync_aggregate=sync_aggregate,
-        fork_version=state.fork.current_version,
         signature_slot=signature_slot,
     )
 
