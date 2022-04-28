@@ -71,7 +71,7 @@ Note that the generalized index has the convenient property that the two childre
 ```python
 def merkle_tree(leaves: Sequence[Bytes32]) -> Sequence[Bytes32]:
     """
-    Return an array representing the tree nodes by generalized index: 
+    Return an array representing the tree nodes by generalized index:
     [0, 1, 2, 3, 4, 5, 6, 7], where each layer is a power of 2. The 0 index is ignored. The 1 index is the root.
     The result will be twice the size as the padded bottom layer for the input leaves.
     """
@@ -212,7 +212,7 @@ def get_generalized_index_length(index: GeneralizedIndex) -> int:
     """
     Return the length of a path represented by a generalized index.
     """
-    return int(log2(index))
+    return floorlog2(index)
 ```
 
 #### `get_generalized_index_bit`

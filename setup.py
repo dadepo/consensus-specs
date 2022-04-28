@@ -474,7 +474,11 @@ def get_generalized_index(ssz_class: Any, *path: Sequence[PyUnion[int, SSZVariab
     ssz_path = Path(ssz_class)
     for item in path:
         ssz_path = ssz_path / item
-    return GeneralizedIndex(ssz_path.gindex())'''
+    return GeneralizedIndex(ssz_path.gindex())
+
+
+def build_proof(ssz_object: SSZObject, *indices: GeneralizedIndex) -> Sequence[Bytes32]:
+    return [ssz_object.getter(i).root for i in get_helper_indices(indices)]'''
 
 
     @classmethod
@@ -611,7 +615,13 @@ def objects_to_spec(preset_name: str,
 
     protocols_spec = '\n\n\n'.join(format_protocol(k, v) for k, v in spec_object.protocols.items())
     for k in list(spec_object.functions):
-        if "ceillog2" in k or "floorlog2" in k:
+        if "ceillog2" in k or "floorlog2" in k or k in [
+            "item_length",
+            "get_elem_type",
+            "chunk_count",
+            "get_item_position",
+            "get_generalized_index",
+        ]:
             del spec_object.functions[k]
     functions = builder.implement_optimizations(spec_object.functions)
     functions_spec = '\n\n\n'.join(functions.values())
@@ -884,6 +894,7 @@ class PySpecCommand(Command):
                     specs/altair/validator.md
                     specs/altair/p2p-interface.md
                     specs/altair/sync-protocol.md
+                    ssz/merkle-proofs.md
                 """
             if self.spec_fork in (BELLATRIX, CAPELLA):
                 self.md_doc_paths += """
@@ -1022,7 +1033,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     author="ethereum",
-    url="https://github.com/ethereum/eth2.0-specs",
+    url="https://github.com/ethereum/consensus-specs",
     include_package_data=False,
     package_data={'configs': ['*.yaml'],
                   'presets': ['*.yaml'],

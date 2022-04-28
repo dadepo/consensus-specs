@@ -1,5 +1,4 @@
 from eth2spec.test.helpers.keys import privkeys
-from eth2spec.test.helpers.merkle import build_proof
 from eth2spec.utils import bls
 from eth2spec.utils.ssz.ssz_typing import Bitlist, ByteVector, ByteList
 
@@ -131,7 +130,7 @@ def get_valid_custody_chunk_response(spec, state, chunk_challenge, challenge_ind
 
     leaf_index = chunk_index + 2**spec.CUSTODY_RESPONSE_DEPTH
     serialized_length = len(custody_data_block).to_bytes(32, 'little')
-    data_branch = build_proof(custody_data_block.get_backing().get_left(), leaf_index) + [serialized_length]
+    data_branch = spec.build_proof(custody_data_block.get_backing().get_left(), leaf_index) + [serialized_length]
 
     return spec.CustodyChunkResponse(
         challenge_index=challenge_index,
