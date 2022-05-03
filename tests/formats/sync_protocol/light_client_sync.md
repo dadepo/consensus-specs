@@ -19,9 +19,9 @@ An SSZ-snappy encoded `bootstrap` object of type `LightClientBootstrap` to initi
 
 The steps to execute in sequence. There may be multiple items of the following types:
 
-#### `process_slot` execution step
+#### `force_update` execution step
 
-The function `process_slot_for_light_client_store(store, current_slot)`
+The function `try_light_client_store_force_update(store, current_slot)`
 should be executed with the specified parameters:
 
 ```yaml
